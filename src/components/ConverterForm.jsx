@@ -6,17 +6,18 @@ const ConverterForm = function() {
 
   function handleChangeColor(e) {
     const { value } = e.target;
-   
-    if (value.length < 7 || value.length > 7) return;
 
-    if (!value.startsWith('#')) {
+    if (!value.startsWith('#') || /[^a-fA-F0-9#]/.test(value) || /(#).*\1/.test(value)) {
       setColor('rgb(250, 128, 114)');
       setMessage('Ошибка!');
-    } else {
+    } else if(value.length === 7) {
       let hex = value.slice(1).match(/..?/g);
       let rgb = [...hex].map(x => parseInt(x, 16)).join();
       setColor(`rgb(${rgb})`);
       setMessage(`rgb(${rgb})`);
+    } else {
+      setColor('rgb(255, 255, 255)');
+      setMessage('Код не распознан');
     }
   }
 
